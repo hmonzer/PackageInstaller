@@ -1,0 +1,9 @@
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller.Tests\obj\Debug\PackageInstaller.Tests.csprojResolveAssemblyReference.cache
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller.Tests\bin\Debug\PackageInstaller.Tests.dll
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller.Tests\bin\Debug\PackageInstaller.Tests.pdb
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller.Tests\bin\Debug\nunit.framework.dll
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller.Tests\bin\Debug\PackageInstaller.dll
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller.Tests\bin\Debug\PackageInstaller.pdb
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller.Tests\bin\Debug\nunit.framework.xml
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller.Tests\obj\Debug\PackageInstaller.Tests.dll
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller.Tests\obj\Debug\PackageInstaller.Tests.pdb

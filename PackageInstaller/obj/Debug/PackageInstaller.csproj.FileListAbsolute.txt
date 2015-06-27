@@ -1,0 +1,6 @@
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller\obj\Debug\PackageInstaller.csprojResolveAssemblyReference.cache
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller\bin\Debug\PackageInstaller.dll.config
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller\bin\Debug\PackageInstaller.dll
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller\bin\Debug\PackageInstaller.pdb
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller\obj\Debug\PackageInstaller.dll
+C:\Users\hmonzer\Desktop\PackageInstaller\PackageInstaller\obj\Debug\PackageInstaller.pdb
