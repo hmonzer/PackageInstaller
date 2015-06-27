@@ -12,7 +12,6 @@ namespace PackageInstaller
     public class PackageDefinition
     {
         public string Package { get; set; }
-
         private List<string> _dependencies { get; set; }
 
         public bool Added { get; private set; }

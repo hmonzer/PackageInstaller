@@ -58,5 +58,37 @@ namespace PackageInstaller
             dependencyQueue.Enqueue(package.Package);
             package.MarkAsAdded();
         }
+
+        public string SortTopologicallyAsString()
+        {
+            string result = string.Empty;
+            foreach (PackageDefinition package in Nodes)
+            {
+                if (package.Added)
+                    continue;
+
+                result += ", " + BuildDependenciesAsStringFor(package);
+            }
+            return result.Substring(2);
+        }
+
+        private string BuildDependenciesAsStringFor(PackageDefinition package)
+        {
+            string result = string.Empty;
+            foreach (string dependency in package.Dependencies)
+            {
+                PackageDefinition dependencyDefinition = Nodes.First(p => p.Package == dependency);
+                if (dependencyDefinition.Added)
+                    continue;
+                if (dependencyDefinition.Visited)
+                    throw new InvalidOperationException("Can't have a cycle in installation order");
+                dependencyDefinition.MarkAsVisited();
+                result += BuildDependenciesAsStringFor(dependencyDefinition) + ", ";
+            }
+            package.MarkAsAdded();
+            return result + package.Package;
+
+        }
+
     }
 }

@@ -126,5 +126,96 @@ namespace PackageInstaller.Tests
             graph.AddPackageDefinition(definitionE);
             Assert.Throws<InvalidOperationException>(() => graph.SortTopologically());
         }
+
+
+        [Test]
+        public void SortTopologicallyAsString_returns_the_node_if_it_has_no_dependency_list()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definition = new PackageDefinition("A");
+            graph.AddPackageDefinition(definition);
+            string sortedList = graph.SortTopologicallyAsString();
+            Assert.AreEqual("A", sortedList);
+        }
+
+        [Test]
+        public void SortTopologicallyAsString_returns_dependency_package_before_the_package_itself()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionA = new PackageDefinition("A:B");
+            PackageDefinition definitionB = new PackageDefinition("B");
+            graph.AddPackageDefinition(definitionA);
+            graph.AddPackageDefinition(definitionB);
+            string sortedList = graph.SortTopologicallyAsString();
+            Assert.AreEqual("B, A" , sortedList);
+        }
+
+        [Test]
+        public void SortTopologicallyAsString_returns_dependency_package_before_the_package_itself_regardless_of_addition_order_to_graph()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionB = new PackageDefinition("B");
+            PackageDefinition definitionA = new PackageDefinition("A:B");
+            graph.AddPackageDefinition(definitionB);
+            graph.AddPackageDefinition(definitionA);
+            string sortedList = graph.SortTopologicallyAsString();
+            Assert.AreEqual("B, A", sortedList);
+        }
+
+        [Test]
+        public void SortTopologicallyAsString_returns_dependency_package_before_the_package_itself_when_multiple_dependencies_involved()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionA = new PackageDefinition("A:B,C,D");
+            PackageDefinition definitionB = new PackageDefinition("B:C");
+            PackageDefinition definitionC = new PackageDefinition("C");
+            PackageDefinition definitionD = new PackageDefinition("D");
+            graph.AddPackageDefinition(definitionA);
+            graph.AddPackageDefinition(definitionC);
+            graph.AddPackageDefinition(definitionB);
+            graph.AddPackageDefinition(definitionD);
+            string sortedList = graph.SortTopologicallyAsString();
+            Assert.AreEqual("C, B, D, A", sortedList);
+        }
+
+        [Test]
+        public void SortTopologicallyAsString_does_not_scan_dependencies_for_Visited_packages()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionA = new PackageDefinition("A:B");
+            definitionA.MarkAsAdded();
+            graph.AddPackageDefinition(definitionA);
+            Queue<string> result = graph.SortTopologically();
+            Assert.IsEmpty(result);
+        }
+
+        [Test]
+        public void SortTopologicallyAsString_throws_exception_if_package_definitions_contain_cycle()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionA = new PackageDefinition("A:B");
+            PackageDefinition definitionB = new PackageDefinition("B:A");
+            graph.AddPackageDefinition(definitionA);
+            graph.AddPackageDefinition(definitionB);
+            Assert.Throws<InvalidOperationException>(() => graph.SortTopologically());
+        }
+
+
+        [Test]
+        public void SortTopologicallyAsString_throws_exception_if_package_definitions_contain_cycle_even_for_more_complex_scenarios()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionA = new PackageDefinition("A:B, C");
+            PackageDefinition definitionD = new PackageDefinition("D:A");
+            PackageDefinition definitionB = new PackageDefinition("B:C");
+            PackageDefinition definitionC = new PackageDefinition("C:E");
+            PackageDefinition definitionE = new PackageDefinition("E:D");
+            graph.AddPackageDefinition(definitionA);
+            graph.AddPackageDefinition(definitionB);
+            graph.AddPackageDefinition(definitionC);
+            graph.AddPackageDefinition(definitionD);
+            graph.AddPackageDefinition(definitionE);
+            Assert.Throws<InvalidOperationException>(() => graph.SortTopologically());
+        }
     }
 }
