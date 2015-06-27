@@ -33,12 +33,28 @@ namespace PackageInstaller
         public Queue<string> SortTopologically()
         {
             Queue<string> result = new Queue<string>();
-            foreach (PackageDefinition definition in Nodes)
+            foreach (PackageDefinition package in Nodes)
             {
-                if (!definition.Dependencies.Any())
-                    result.Enqueue(definition.Package);
+                if (result.Contains(package.Package))
+                    continue;
+                result = BuildDependenciesFor(package);
             }
             return result;
-        } 
+        }
+
+        private Queue<string> BuildDependenciesFor(PackageDefinition package)
+        {
+            Queue<string> result = new Queue<string>();
+            foreach (string dependency in package.Dependencies)
+            {
+                if (result.Contains(dependency))
+                    continue;
+                Queue<string> dependencyQueue = BuildDependenciesFor(Nodes.First(p => p.Package == dependency));
+               while(dependencyQueue.Any())
+                    result.Enqueue(dependencyQueue.Dequeue());
+            }
+            result.Enqueue(package.Package);
+            return result;
+        }
     }
 }

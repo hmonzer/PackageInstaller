@@ -36,7 +36,7 @@ namespace PackageInstaller.Tests
             graph.AddPackageDefinition(definition);
             Queue<string> sortedQueue = graph.SortTopologically();
             Assert.IsTrue(sortedQueue.Count == 1);
-            Assert.AreEqual(sortedQueue.Peek(), definition.Package);
+            Assert.AreEqual(definition.Package, sortedQueue.Peek());
         }
 
         [Test]
@@ -48,12 +48,54 @@ namespace PackageInstaller.Tests
             graph.AddPackageDefinition(definitionA);
             graph.AddPackageDefinition(definitionB);
             Queue<string> sortedQueue = graph.SortTopologically();
-            Assert.AreEqual(sortedQueue.Count, 2);
-            Assert.AreEqual(sortedQueue.Dequeue(), definitionB.Package);
-            Assert.AreEqual(sortedQueue.Dequeue(), definitionA.Package);
+            Assert.AreEqual(2, sortedQueue.Count);
+            Assert.AreEqual(definitionB.Package, sortedQueue.Dequeue());
+            Assert.AreEqual(definitionA.Package, sortedQueue.Dequeue());
         }
 
+        [Test]
+        public void SortTopologically_returns_dependency_package_before_the_package_itself_regardless_of_addition_order_to_graph()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionB = new PackageDefinition("B");
+            PackageDefinition definitionA = new PackageDefinition("A:B");
+            graph.AddPackageDefinition(definitionB);
+            graph.AddPackageDefinition(definitionA);
+            Queue<string> sortedQueue = graph.SortTopologically();
+            Assert.AreEqual(2, sortedQueue.Count);
+            Assert.AreEqual(definitionB.Package, sortedQueue.Dequeue());
+            Assert.AreEqual(definitionA.Package, sortedQueue.Dequeue());
+        }
 
-        
+        [Test]
+        public void SortTopologically_returns_dependency_package_before_the_package_itself_when_multiple_dependencies_involved()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionA = new PackageDefinition("A:B,C,D");
+            PackageDefinition definitionB = new PackageDefinition("B:C");
+            PackageDefinition definitionC = new PackageDefinition("C");
+            PackageDefinition definitionD = new PackageDefinition("D");
+            graph.AddPackageDefinition(definitionA);
+            graph.AddPackageDefinition(definitionC);
+            graph.AddPackageDefinition(definitionB);
+            graph.AddPackageDefinition(definitionD);
+            Queue<string> sortedQueue = graph.SortTopologically();
+            Assert.AreEqual(4, sortedQueue.Count);
+            Assert.AreEqual(definitionC.Package, sortedQueue.Dequeue());
+            Assert.AreEqual(definitionB.Package, sortedQueue.Dequeue());
+            Assert.AreEqual(definitionD.Package, sortedQueue.Dequeue());
+            Assert.AreEqual(definitionA.Package, sortedQueue.Dequeue());
+        }
+
+        [Test]
+        public void SortTopologically_throws_exception_if_package_definitions_contain_cycle()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionA = new PackageDefinition("A:B");
+            PackageDefinition definitionB = new PackageDefinition("B:A");
+            graph.AddPackageDefinition(definitionA);
+            graph.AddPackageDefinition(definitionB);
+            Assert.Throws<InvalidOperationException>(() => graph.SortTopologically());
+        }
     }
 }
