@@ -23,7 +23,7 @@ namespace PackageInstaller
         public PackageDefinition(string packageDefinition)
         {
             Package = getPackageNameFromStringDefinition(packageDefinition);
-            _dependencies = new List<string>();
+            _dependencies = getDepdenciesFromStringDefinition(packageDefinition);
         }
 
         private string getPackageNameFromStringDefinition(string packageDef)
@@ -32,6 +32,19 @@ namespace PackageInstaller
             return colonIndex > 0 ? packageDef.Substring(0, colonIndex).Trim() :
             packageDef.Trim();
         }
+
+        private List<string> getDepdenciesFromStringDefinition(string packageDef)
+        {
+            List<string> results = new List<string>();
+            int colonIndex = packageDef.IndexOf(":");
+            if (colonIndex > 0)
+            {
+                packageDef = packageDef.Substring(colonIndex + 1).Trim();
+                string[] depdenciesArray = packageDef.Split(',');
+                results.AddRange(depdenciesArray.Select(d => d.Trim()));
+            }
+            return results;
+        } 
 
         
     }
