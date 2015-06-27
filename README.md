@@ -1,5 +1,5 @@
 # PackageInstaller
-Package installer to topologically sort a list or packages with their dependencies
+Package installer Takes a list of packages with their dependencies and outputs a list of packages in the order of install.
 
 The installer builds a directed graph of packages where each vertex represents a package and each edge represents a dependency.
 So if Package B depedens on A, The graph would be A -> B.
