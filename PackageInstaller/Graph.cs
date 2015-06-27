@@ -29,5 +29,16 @@ namespace PackageInstaller
             }
             return false;
         }
+
+        public Queue<string> SortTopologically()
+        {
+            Queue<string> result = new Queue<string>();
+            foreach (PackageDefinition definition in Nodes)
+            {
+                if (!definition.Dependencies.Any())
+                    result.Enqueue(definition.Package);
+            }
+            return result;
+        } 
     }
 }

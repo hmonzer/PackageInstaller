@@ -27,5 +27,33 @@ namespace PackageInstaller.Tests
             graph.AddPackageDefinition(definition);
             Assert.IsTrue(graph.Contains(definition.Package));
         }
+
+        [Test]
+        public void SortTopologically_returns_the_node_if_it_has_no_dependency_list()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definition = new PackageDefinition("A");
+            graph.AddPackageDefinition(definition);
+            Queue<string> sortedQueue = graph.SortTopologically();
+            Assert.IsTrue(sortedQueue.Count == 1);
+            Assert.AreEqual(sortedQueue.Peek(), definition.Package);
+        }
+
+        [Test]
+        public void SortTopologically_returns_dependency_package_before_the_package_itself()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionA = new PackageDefinition("A:B");
+            PackageDefinition definitionB = new PackageDefinition("B");
+            graph.AddPackageDefinition(definitionA);
+            graph.AddPackageDefinition(definitionB);
+            Queue<string> sortedQueue = graph.SortTopologically();
+            Assert.AreEqual(sortedQueue.Count, 2);
+            Assert.AreEqual(sortedQueue.Dequeue(), definitionB.Package);
+            Assert.AreEqual(sortedQueue.Dequeue(), definitionA.Package);
+        }
+
+
+        
     }
 }
