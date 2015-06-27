@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="GraphTests.cs" />
     <Compile Include="PackageDefinitionTests.cs" />
+    <Compile Include="PackageDependencyResolverTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
