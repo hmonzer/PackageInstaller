@@ -15,6 +15,9 @@ namespace PackageInstaller
 
         private List<string> _dependencies { get; set; }
 
+        public bool Added { get; private set; }
+        public bool Visited { get; private set; }
+
         public IEnumerable<string> Dependencies
         {
             get { return _dependencies.AsEnumerable(); }
@@ -44,8 +47,17 @@ namespace PackageInstaller
                 results.AddRange(depdenciesArray.Select(d => d.Trim()));
             }
             return results;
-        } 
+        }
 
-        
+        public void MarkAsAdded()
+        {
+            Added = true;
+        }
+
+        public void MarkAsVisited()
+        {
+            Visited = true;
+        }
+
     }
 }

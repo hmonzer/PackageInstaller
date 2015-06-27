@@ -35,26 +35,28 @@ namespace PackageInstaller
             Queue<string> result = new Queue<string>();
             foreach (PackageDefinition package in Nodes)
             {
-                if (result.Contains(package.Package))
+                if (package.Added)
                     continue;
-                result = BuildDependenciesFor(package);
+
+                BuildDependenciesFor(package,ref  result);
             }
             return result;
         }
 
-        private Queue<string> BuildDependenciesFor(PackageDefinition package)
+        private void BuildDependenciesFor(PackageDefinition package, ref Queue<string> dependencyQueue)
         {
-            Queue<string> result = new Queue<string>();
             foreach (string dependency in package.Dependencies)
             {
-                if (result.Contains(dependency))
+                PackageDefinition dependencyDefinition = Nodes.First(p => p.Package == dependency);
+                if (dependencyDefinition.Added)
                     continue;
-                Queue<string> dependencyQueue = BuildDependenciesFor(Nodes.First(p => p.Package == dependency));
-               while(dependencyQueue.Any())
-                    result.Enqueue(dependencyQueue.Dequeue());
+                if(dependencyDefinition.Visited)
+                    throw new InvalidOperationException("Can't have a cycle in installation order");
+                dependencyDefinition.MarkAsVisited();
+                BuildDependenciesFor(dependencyDefinition,ref dependencyQueue);
             }
-            result.Enqueue(package.Package);
-            return result;
+            dependencyQueue.Enqueue(package.Package);
+            package.MarkAsAdded();
         }
     }
 }

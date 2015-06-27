@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,24 @@ namespace PackageInstaller.Tests
             Assert.AreEqual(packageDef.Package, package);
             Assert.IsFalse(dependencies.Except(packageDef.Dependencies).Any());
 
+        }
+
+        [Test]
+        public void MarkAsAdded_PackageDefinition_sets_it_as_Added()
+        {
+            PackageDefinition def = new PackageDefinition("A");
+            Assert.IsFalse(def.Added);
+            def.MarkAsAdded();
+            Assert.IsTrue(def.Added);
+        }
+
+        [Test]
+        public void MarkAsVisited_sets_PackageDefinition_as_Visited()
+        {
+            PackageDefinition def = new PackageDefinition("A");
+            Assert.IsFalse(def.Visited);
+            def.MarkAsVisited();
+            Assert.IsTrue(def.Visited);
         }
 
         public IEnumerable<TestCaseData> packageTestData

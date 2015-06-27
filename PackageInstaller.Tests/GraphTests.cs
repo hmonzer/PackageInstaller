@@ -17,7 +17,7 @@ namespace PackageInstaller.Tests
             PackageDefinition definition = new PackageDefinition("A");
             Assert.IsFalse(graph.Contains(definition.Package));
         }
-        
+
 
         [Test]
         public void AddNode_adds_node_into_list()
@@ -88,6 +88,17 @@ namespace PackageInstaller.Tests
         }
 
         [Test]
+        public void SortTopologically_does_not_scan_dependencies_for_Visited_packages()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionA = new PackageDefinition("A:B");
+            definitionA.MarkAsAdded();
+            graph.AddPackageDefinition(definitionA);
+            Queue<string> result = graph.SortTopologically();
+            Assert.IsEmpty(result);
+        }
+
+        [Test]
         public void SortTopologically_throws_exception_if_package_definitions_contain_cycle()
         {
             Graph graph = new Graph();
@@ -95,6 +106,24 @@ namespace PackageInstaller.Tests
             PackageDefinition definitionB = new PackageDefinition("B:A");
             graph.AddPackageDefinition(definitionA);
             graph.AddPackageDefinition(definitionB);
+            Assert.Throws<InvalidOperationException>(() => graph.SortTopologically());
+        }
+
+
+        [Test]
+        public void SortTopologically_throws_exception_if_package_definitions_contain_cycle_even_for_more_complex_scenarios()
+        {
+            Graph graph = new Graph();
+            PackageDefinition definitionA = new PackageDefinition("A:B, C");
+            PackageDefinition definitionD = new PackageDefinition("D:A");
+            PackageDefinition definitionB = new PackageDefinition("B:C");
+            PackageDefinition definitionC = new PackageDefinition("C:E");
+            PackageDefinition definitionE = new PackageDefinition("E:D");
+            graph.AddPackageDefinition(definitionA);
+            graph.AddPackageDefinition(definitionB);
+            graph.AddPackageDefinition(definitionC);
+            graph.AddPackageDefinition(definitionD);
+            graph.AddPackageDefinition(definitionE);
             Assert.Throws<InvalidOperationException>(() => graph.SortTopologically());
         }
     }
