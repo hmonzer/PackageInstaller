@@ -22,7 +22,17 @@ namespace PackageInstaller
 
         public PackageDefinition(string packageDefinition)
         {
-            
+            Package = getPackageNameFromStringDefinition(packageDefinition);
+            _dependencies = new List<string>();
         }
+
+        private string getPackageNameFromStringDefinition(string packageDef)
+        {
+            int colonIndex = packageDef.IndexOf(":");
+            return colonIndex > 0 ? packageDef.Substring(0, colonIndex).Trim() :
+            packageDef.Trim();
+        }
+
+        
     }
 }

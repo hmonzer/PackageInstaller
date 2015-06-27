@@ -17,7 +17,7 @@ namespace PackageInstaller.Tests
         {
             PackageDefinition packageDef = new PackageDefinition(input);
             Assert.AreEqual(packageDef.Package, package);
-            Assert.IsFalse(packageDef.Dependencies.Except(dependencies).Any());
+           Assert.IsFalse(dependencies.Except(packageDef.Dependencies).Any());
 
         }
 
@@ -27,7 +27,9 @@ namespace PackageInstaller.Tests
             {
                 Collection<TestCaseData> testCases = new Collection<TestCaseData>();
 
-                TestCaseData noDepdencyCase = new TestCaseData("A", "A", new List<string>());
+                TestCaseData noDepdencyCaseNoColon = new TestCaseData("A ", "A", new List<string>());
+                testCases.Add(noDepdencyCaseNoColon);
+                TestCaseData noDepdencyCase = new TestCaseData("A: ", "A", new List<string>());
                 testCases.Add(noDepdencyCase);
                 TestCaseData singleDepdencyCase = new TestCaseData("A: B", "A", new List<string>() {"B"});
                 testCases.Add(singleDepdencyCase);
