@@ -19,7 +19,7 @@ namespace PackageInstaller.Tests
             {
                 Console.SetOut(sw);
                 PackageDependencyResolver.Main(packages);
-                Assert.AreEqual("", sw.ToString());
+                Assert.AreEqual(output, sw.ToString());
             }
         }
 
@@ -35,6 +35,7 @@ namespace PackageInstaller.Tests
                 };
                 string validOutput = "KittenService, Ice, Cyberportal, Leetmeme, CamelCaser, Fraudstream";
                 TestCaseData validData = new TestCaseData(validPackages, validOutput);
+                validData.SetName("Valid Case");
                 cases.Add(validData);
 
                 string[] InvalidPackages = new[]
@@ -44,6 +45,7 @@ namespace PackageInstaller.Tests
                 };
                 TestCaseData invalidData = new TestCaseData(InvalidPackages, null).Throws(typeof(InvalidOperationException));
                 cases.Add(invalidData);
+                invalidData.SetName("Invalid Case");
 
                 return cases;
             }

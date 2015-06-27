@@ -25,6 +25,7 @@ namespace PackageInstaller
 
         public PackageDefinition(string packageDefinition)
         {
+            packageDefinition = packageDefinition.Trim();
             Package = getPackageNameFromStringDefinition(packageDefinition);
             _dependencies = getDepdenciesFromStringDefinition(packageDefinition);
         }
@@ -43,8 +44,11 @@ namespace PackageInstaller
             if (colonIndex > 0)
             {
                 packageDef = packageDef.Substring(colonIndex + 1).Trim();
-                string[] depdenciesArray = packageDef.Split(',');
-                results.AddRange(depdenciesArray.Select(d => d.Trim()));
+                if (packageDef.Length > 0)
+                {
+                    string[] depdenciesArray = packageDef.Split(',');
+                    results.AddRange(depdenciesArray.Select(d => d.Trim()));
+                }
             }
             return results;
         }

@@ -19,6 +19,7 @@ namespace PackageInstaller.Tests
             PackageDefinition packageDef = new PackageDefinition(input);
             Assert.AreEqual(packageDef.Package, package);
             Assert.IsFalse(dependencies.Except(packageDef.Dependencies).Any());
+            Assert.IsFalse(packageDef.Dependencies.Except(dependencies).Any());
 
         }
 
