@@ -1,0 +1,105 @@
+openapi: 3.0.1
+info:
+  title: Money Transfer
+  description: Revolut Challenge API
+  contact:
+    name: Hussein Monzer
+    email: hsen.monzer@gmail.com
+  version: "1.0"
+paths:
+  /accounts/{accountId}:
+    get:
+      operationId: findAccountById
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: findAccountById default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Object'
+  /accounts:
+    post:
+      operationId: createAccount
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountCreationApiRequest'
+        required: true
+      responses:
+        default:
+          description: createAccount default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Object'
+  /transfers/{transferId}:
+    get:
+      operationId: getMoneyTransferById
+      parameters:
+      - name: transferId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: getMoneyTransferById default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Object'
+  /transfers:
+    post:
+      operationId: createMoneyTransfer
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoneyTransferApiRequest'
+        required: true
+      responses:
+        default:
+          description: createMoneyTransfer default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Object'
+components:
+  schemas:
+    Object:
+      type: object
+    AccountCreationApiRequest:
+      required:
+      - initialAmount
+      type: object
+      properties:
+        initialAmount:
+          type: number
+          format: double
+    MoneyTransferApiRequest:
+      required:
+      - beneficiaryAccountId
+      - sourceAccountId
+      - transferAmount
+      type: object
+      properties:
+        sourceAccountId:
+          type: string
+          format: uuid
+        beneficiaryAccountId:
+          type: string
+          format: uuid
+        transferAmount:
+          type: number
+          format: double
